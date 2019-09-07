@@ -1,33 +1,48 @@
-import React, { useState } from "react";
-import { RouteComponentProps, Redirect } from "@reach/router";
+import React, { useState, useContext, useEffect } from "react";
+import { RouteComponentProps, navigate } from "@reach/router";
 import netlifyIdentity from "netlify-identity-widget";
+import { UserContext } from "../context/UserContext";
+import { Button } from "../components/Button/Button";
 
-export const Login: React.FC<RouteComponentProps> = props => {
+export const Login: React.FC<RouteComponentProps> = () => {
   const [redirectToReferrer, setRedirectToReferrer] = useState(false);
+  const { user, setUser, isAuthenticated, setIsAuthenticated } = useContext(
+    UserContext
+  );
 
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  let { from } = (props.location && props.location.state) || {
-    from: { pathname: "/" }
-  };
-
+  console.log("user", user);
   const login = () => {
-    setIsAuthenticated(true);
     netlifyIdentity.open();
     netlifyIdentity.on("login", user => {
-      console.log("user>>>>", user);
       setRedirectToReferrer(true);
+      setUser(user);
+      setIsAuthenticated(true);
     });
   };
 
-  // Get the current user:
-  const user = netlifyIdentity.currentUser();
-  if (redirectToReferrer) return <Redirect to={from} />;
+  const logout = () => {
+    netlifyIdentity.logout();
+    netlifyIdentity.on("logout", () => {
+      setRedirectToReferrer(false);
+      setIsAuthenticated(false);
+    });
+  };
+
+  if (redirectToReferrer) {
+    navigate("/upload");
+  }
 
   return (
     <div>
-      <button onClick={() => login()}>Login</button>
-      {user && <button onClick={() => netlifyIdentity.logout()}>Logout</button>}
+      {isAuthenticated ? (
+        <Button isInverted onClick={() => logout()}>
+          Logout
+        </Button>
+      ) : (
+        <Button isInverted onClick={() => login()}>
+          Login
+        </Button>
+      )}
     </div>
   );
 };
