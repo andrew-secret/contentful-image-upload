@@ -1,0 +1,46 @@
+.root {
+  height: 44px;
+  max-width: 100%;
+  line-height: 16px;
+  font-family: inherit;
+  font-size: 16px;
+  font-weight: bold;
+  border-radius: 4px;
+  border: 2px solid cornflowerblue;
+  padding: 12px 20px;
+  color: white;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  user-select: none;
+  appearance: none;
+  transition: background-color 200ms, border-color 200ms;
+  background-color: cornflowerblue;
+  position: relative;
+  width: 100%;
+  &:enabled {
+    cursor: pointer;
+  }
+  &:focus,
+  &:active {
+    outline: none;
+  }
+
+  &:focus,
+  &:hover {
+    background-color: darken(cornflowerblue, 8%);
+    border-color: darken(cornflowerblue, 8%);
+  }
+
+  &.inverted {
+    background-color: white;
+    color: cornflowerblue;
+
+    &:focus,
+    &:hover {
+      background-color: cornflowerblue;
+      color: white;
+      border-color: white;
+    }
+  }
+}
