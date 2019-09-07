@@ -5,7 +5,9 @@
   "dependencies": {
     "@reach/router": "^1.2.1",
     "@types/jest": "24.0.18",
+    "@types/netlify-identity-widget": "^1.4.1",
     "@types/node": "12.7.4",
+    "@types/reach__router": "^1.2.4",
     "@types/react": "16.9.2",
     "@types/react-dom": "16.9.0",
     "add": "^2.0.6",
@@ -36,9 +38,5 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  },
-  "devDependencies": {
-    "@types/": "reach/router",
-    "@types/netlify-identity-widget": "^1.4.1"
   }
 }
