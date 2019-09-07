@@ -1,0 +1,25 @@
+.root {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: cornflowerblue;
+  border: 2px dashed gainsboro;
+  border-radius: 4px;
+  transition: border-color 200ms ease-in-out;
+  min-height: 200px;
+
+  svg {
+    width: 100%;
+    max-width: 100px;
+  }
+
+  &:hover,
+  &:focus {
+    border-color: cornflowerblue;
+  }
+}
+
+.label {
+  font-size: 14px;
+  margin-bottom: 12px;
+}
