@@ -10,7 +10,6 @@ export const Login: React.FC<RouteComponentProps> = () => {
     UserContext
   );
 
-  console.log("user", user);
   const login = () => {
     netlifyIdentity.open();
     netlifyIdentity.on("login", user => {
