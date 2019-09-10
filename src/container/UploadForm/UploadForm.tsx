@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react";
+import React, { useState, useContext } from "react";
 import { Button } from "../../components/Button/Button";
 import { FormRow } from "../../components/FormRow/FormRow";
 import { Input } from "../../components/Input/Input";
@@ -9,8 +9,10 @@ import { UserContext } from "../../context/UserContext";
 
 export const UploadForm: React.FC = () => {
   const [inputTitle, setInputTitle] = useState("");
+  const [inputDescription, setInputDescription] = useState("");
   const [inputFile, setInputFile] = useState();
   const [imageUrl, setImageUrl] = useState("");
+
   const { user } = useContext(UserContext);
 
   if (!user) {
@@ -19,6 +21,12 @@ export const UploadForm: React.FC = () => {
 
   const handleTitleChange = (evnt: React.SyntheticEvent<HTMLInputElement>) => {
     setInputTitle(evnt.currentTarget.value);
+  };
+
+  const handleDescriptionChange = (
+    evnt: React.SyntheticEvent<HTMLInputElement>
+  ) => {
+    setInputDescription(evnt.currentTarget.value);
   };
 
   const handleFileChange = (evnt: React.SyntheticEvent<HTMLInputElement>) => {
@@ -41,19 +49,23 @@ export const UploadForm: React.FC = () => {
     };
   };
 
-  const handleSubmit = async (evnt: React.SyntheticEvent<HTMLFormElement>) => {
+  const handleSubmit = (evnt: React.SyntheticEvent<HTMLFormElement>) => {
     evnt.preventDefault();
-
-    await fetch("./netlify/netlify-webhooks/contentful-webhook", {
-      headers: {
-        Authorization: `Bearer ${user.token && user.token.access_token}`
-      }
-    });
-
-    console.log("called...");
+    if (user.token) {
+      fetch(
+        `/.netlify/functions/contentful-webhook?title=${inputTitle}&description=${inputDescription}`,
+        {
+          headers: {
+            Authorization: `Bearer ${user.token.access_token}`,
+            "Content-Type": "application/octet-stream"
+          },
+          method: "POST",
+          body: inputFile
+        }
+      );
+    }
   };
 
-  console.log("imageUrl", imageUrl);
   return (
     <form onSubmit={evnt => handleSubmit(evnt)}>
       <Headline>Upload your image to contentful</Headline>
@@ -74,6 +86,14 @@ export const UploadForm: React.FC = () => {
           placeholder="Type your image title..."
           onChange={handleTitleChange}
           value={inputTitle}
+        />
+      </FormRow>
+      <FormRow id="description" label="Description">
+        <Input
+          id="description"
+          placeholder="Type your image description..."
+          onChange={handleDescriptionChange}
+          value={inputDescription}
         />
       </FormRow>
       <Button type="submit">Upload image</Button>
